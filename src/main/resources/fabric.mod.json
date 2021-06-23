@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "not-enough-servers",
+  "version": "${version}",
+  "name": "Not Enough Servers",
+  "description": "v1 alpha not enough servers (nes) by zelo101",
+  "authors": [
+    "Zelo101"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Zolo101/NotEnoughServers",
+    "sources": "https://github.com/Zolo101/NotEnoughServers",
+    "issues": "https://github.com/Zolo101/NotEnoughServers/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/not-enough-servers/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "dev.zelo.java.notenoughservers.NotEnoughServers"
+    ]
+  },
+  "mixins": [
+    "not-enough-servers.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.6",
+    "fabric": "*",
+    "minecraft": "1.16.5"
+  }
+}
