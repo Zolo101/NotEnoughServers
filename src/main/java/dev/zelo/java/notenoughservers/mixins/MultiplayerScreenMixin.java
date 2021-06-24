@@ -50,7 +50,7 @@ public abstract class MultiplayerScreenMixin extends Screen {
                 serverListWidget.setScrollAmount(serverListWidget.getMaxScroll());
                 break;
             case 261: // DELETE key
-                if (Screen.hasShiftDown() && serverListWidget.children().size() > 0) {
+                if (Screen.hasShiftDown() && serverListWidget.getSelected() != null) {
                     serverList.remove(((MultiplayerServerListWidget.ServerEntry) serverListWidget.getSelected()).getServer());
                     serverList.saveFile();
                     serverListWidget.setSelected(null);
