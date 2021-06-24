@@ -3,7 +3,7 @@ package dev.zelo.java.notenoughservers;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.network.ServerInfo;
-import net.minecraft.client.options.ServerList;
+import net.minecraft.client.option.ServerList;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.client.MinecraftClient;

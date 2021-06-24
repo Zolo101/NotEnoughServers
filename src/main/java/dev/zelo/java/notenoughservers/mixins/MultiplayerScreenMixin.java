@@ -3,7 +3,7 @@ package dev.zelo.java.notenoughservers.mixins;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
-import net.minecraft.client.options.ServerList;
+import net.minecraft.client.option.ServerList;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -50,8 +50,8 @@ public abstract class MultiplayerScreenMixin extends Screen {
                 serverListWidget.setScrollAmount(serverListWidget.getMaxScroll());
                 break;
             case 261: // DELETE key
-                if (Screen.hasShiftDown() && serverListWidget.children().size() > 0) {
-                    serverList.remove(((MultiplayerServerListWidget.ServerEntry) serverListWidget.getSelected()).getServer());
+                if (Screen.hasShiftDown() && serverListWidget.getSelectedOrNull() != null) {
+                    serverList.remove(((MultiplayerServerListWidget.ServerEntry) serverListWidget.getSelectedOrNull()).getServer());
                     serverList.saveFile();
                     serverListWidget.setSelected(null);
                     serverListWidget.setServers(this.serverList);

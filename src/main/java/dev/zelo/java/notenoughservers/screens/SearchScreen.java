@@ -1,5 +1,5 @@
 package dev.zelo.java.notenoughservers.screens;
-
+/*
 import net.minecraft.client.gui.screen.ConnectScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
@@ -40,3 +40,4 @@ public class SearchScreen extends Screen {
 //        this.serverListWidget = new MultiplayerServerListWidget(this, this.client, this.width, this.height, 32, this.height - 64, 36)
     }
 }
+*/
