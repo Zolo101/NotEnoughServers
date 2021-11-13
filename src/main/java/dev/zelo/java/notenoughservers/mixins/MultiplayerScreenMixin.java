@@ -3,8 +3,10 @@ package dev.zelo.java.notenoughservers.mixins;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.option.ServerList;
 import net.minecraft.text.Text;
+import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,6 +21,14 @@ public abstract class MultiplayerScreenMixin extends Screen {
     @Shadow private ServerList serverList;
 
     @Shadow public abstract ServerList getServerList();
+
+    @Shadow protected abstract void removeEntry(boolean confirmedAction);
+
+    @Shadow protected abstract void editEntry(boolean confirmedAction);
+
+    @Shadow private ButtonWidget buttonEdit;
+
+    @Shadow private ButtonWidget buttonDelete;
 
     public MultiplayerScreenMixin(Text title) {
         super(title);
@@ -39,24 +49,29 @@ public abstract class MultiplayerScreenMixin extends Screen {
         // return true if this does something
         if (serverListWidget.children().size() == 0) return;
         switch (keyCode) {
-            case 268: // HOME key
+            case GLFW.GLFW_KEY_HOME: // HOME key
                 MultiplayerServerListWidget.Entry topEntry = serverListWidget.children().get(0);
                 serverListWidget.setSelected(topEntry);
                 serverListWidget.setScrollAmount(-serverListWidget.getMaxScroll());
                 break;
-            case 269: // END key
+            case GLFW.GLFW_KEY_END: // END key
                 MultiplayerServerListWidget.Entry bottomEntry = serverListWidget.children().get(serverListWidget.children().size()-2);
                 serverListWidget.setSelected(bottomEntry);
                 serverListWidget.setScrollAmount(serverListWidget.getMaxScroll());
                 break;
-            case 261: // DELETE key
-                if (Screen.hasShiftDown() && serverListWidget.getSelectedOrNull() != null) {
-                    serverList.remove(((MultiplayerServerListWidget.ServerEntry) serverListWidget.getSelectedOrNull()).getServer());
-                    serverList.saveFile();
-                    serverListWidget.setSelected(null);
-                    serverListWidget.setServers(this.serverList);
+            case GLFW.GLFW_KEY_DELETE: // DELETE key
+                if (serverListWidget.getSelectedOrNull() != null) {
+                    if (Screen.hasShiftDown()) { // quick delete
+                        this.removeEntry(true);
+                    } else { // ask to delete
+                        this.buttonDelete.onPress();
+                    }
                 }
                 break;
+            case GLFW.GLFW_KEY_R: // R key (Rename)
+                if (serverListWidget.getSelectedOrNull() != null) {
+                    this.buttonEdit.onPress();
+                }
             default:
                 break;
         }
