@@ -1,0 +1,8 @@
+{
+  "not-enough-servers.name": "Not Enough Servers",
+  "not-enough-servers.MS_TOP": "Top of List",
+  "not-enough-servers.MS_BOTTOM": "Bottom of List",
+  "not-enough-servers.MS_DELETE": "Delete Server",
+  "not-enough-servers.MS_ADD": "Add Server",
+  "not-enough-servers.MS_RENAME": "Rename Server"
+}

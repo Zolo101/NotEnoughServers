@@ -6,13 +6,18 @@ import dev.zelo.java.notenoughservers.mixins.ServerListAccessor;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+//import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.gui.screen.ConnectScreen;
+import net.minecraft.client.gui.screen.MessageScreen;
 import net.minecraft.client.network.ServerAddress;
 import net.minecraft.client.network.ServerInfo;
+//import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.option.ServerList;
+//import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Formatting;
+//import org.lwjgl.glfw.GLFW;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.*;
 import java.util.List;
@@ -21,6 +26,12 @@ import java.util.concurrent.CompletableFuture;
 
 public class NotEnoughServers implements ClientModInitializer {
     public static final String MOD_ID = "not-enough-servers";
+//    public static KeyBinding MS_TOP = KeyBindingHelper.registerKeyBinding(new KeyBinding("not-enough-servers.MS_TOP", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_HOME, "not-enough-servers.name"));
+//    public static KeyBinding MS_BOTTOM = KeyBindingHelper.registerKeyBinding(new KeyBinding("not-enough-servers.MS_BOTTOM", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_END, "not-enough-servers.name"));
+//    public static KeyBinding MS_DELETE = KeyBindingHelper.registerKeyBinding(new KeyBinding("not-enough-servers.MS_DELETE", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_DELETE, "not-enough-servers.name"));
+//    public static KeyBinding MS_ADD = KeyBindingHelper.registerKeyBinding(new KeyBinding("not-enough-servers.MS_ADD", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_A, "not-enough-servers.name"));
+//    public static KeyBinding MS_RENAME = KeyBindingHelper.registerKeyBinding(new KeyBinding("not-enough-servers.MS_RENAME", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R, "not-enough-servers.name"));
+
 
     public int attemptAdd(com.mojang.brigadier.context.CommandContext<net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource> context) {
         MinecraftClient client = MinecraftClient.getInstance();
@@ -34,6 +45,7 @@ public class NotEnoughServers implements ClientModInitializer {
         serverList.loadFile();
         if (serverIPThis) {
             if (client.isInSingleplayer()) {
+                // TODO: Do translation key support
                 Text failText = Text.literal("NES: 'this' only works when in a server!")
                         .styled((style -> style.withColor(Formatting.RED)));
                 context.getSource().sendFeedback(failText);
@@ -49,6 +61,7 @@ public class NotEnoughServers implements ClientModInitializer {
         serverList.saveFile();
 
         String addressToShow = serverIPThis ? addresses[0] : serverIP;
+        // TODO: Do translation key support
         Text successText = Text.literal("NES: Successfully added '" + serverName + "' (" + addressToShow + ")")
                 .styled((style -> style.withColor(Formatting.GREEN)));
         context.getSource().sendFeedback(successText);
@@ -67,11 +80,15 @@ public class NotEnoughServers implements ClientModInitializer {
 
         if (serverToJoin.isPresent()) {
             // this does not seem to help the crashing in singleplayer
+            client.world.disconnect();
             if (!client.isInSingleplayer()) {
+                client.disconnect(new MessageScreen(Text.translatable("menu.savingLevel")));
+            } else {
                 client.disconnect();
             }
             client.send(() -> ConnectScreen.connect(client.currentScreen, client, ServerAddress.parse(serverToJoin.get().address), serverToJoin.get()));
         } else {
+            // TODO: Do translation key support
             Text errorText = Text.literal("Unknown server name!")
                     .styled((style -> style.withColor(Formatting.RED)));
             context.getSource().sendFeedback(errorText);
@@ -82,12 +99,6 @@ public class NotEnoughServers implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         // TODO: Do keybind and translation string support
-//        KeyBinding MS_TOP = KeyBindingHelper.registerKeyBinding(new KeyBinding("Top of List", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_HOME, "Not Enough Servers"));
-//        KeyBinding MS_BOTTOM = KeyBindingHelper.registerKeyBinding(new KeyBinding("Bottom of List", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_END, "Not Enough Servers"));
-//        KeyBinding MS_DELETE = KeyBindingHelper.registerKeyBinding(new KeyBinding("Delete Server", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_DELETE, "Not Enough Servers"));
-//        KeyBinding MS_ADD = KeyBindingHelper.registerKeyBinding(new KeyBinding("Add Server", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_A, "Not Enough Servers"));
-//        KeyBinding MS_RENAME = KeyBindingHelper.registerKeyBinding(new KeyBinding("Rename Server", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_F2, "Not Enough Servers"));
-
         SuggestionProvider<FabricClientCommandSource> addActions = (context, builder) -> {
             MinecraftClient client = MinecraftClient.getInstance();
             if (!client.isInSingleplayer()) builder.suggest("this");
