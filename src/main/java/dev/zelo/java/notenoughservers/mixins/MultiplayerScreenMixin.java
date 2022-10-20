@@ -1,10 +1,12 @@
 package dev.zelo.java.notenoughservers.mixins;
 
+import net.minecraft.client.gui.screen.AddServerScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.option.ServerList;
+import net.minecraft.client.network.ServerInfo;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,6 +32,14 @@ public abstract class MultiplayerScreenMixin extends Screen {
 
     @Shadow private ButtonWidget buttonDelete;
 
+//    protected TextFieldWidget searchBox;
+
+    @Shadow protected abstract void addEntry(boolean confirmedAction);
+
+    @Shadow private ServerInfo selectedEntry;
+
+//    private ButtonWidget buttonAdd;
+
     public MultiplayerScreenMixin(Text title) {
         super(title);
     }
@@ -48,17 +58,20 @@ public abstract class MultiplayerScreenMixin extends Screen {
 //        System.out.println(modifiers);
         // return true if this does something
         if (serverListWidget.children().size() == 0) return;
+
         switch (keyCode) {
             case GLFW.GLFW_KEY_HOME: // HOME key
                 MultiplayerServerListWidget.Entry topEntry = serverListWidget.children().get(0);
                 serverListWidget.setSelected(topEntry);
                 serverListWidget.setScrollAmount(-serverListWidget.getMaxScroll());
                 break;
+
             case GLFW.GLFW_KEY_END: // END key
                 MultiplayerServerListWidget.Entry bottomEntry = serverListWidget.children().get(serverListWidget.children().size()-2);
                 serverListWidget.setSelected(bottomEntry);
                 serverListWidget.setScrollAmount(serverListWidget.getMaxScroll());
                 break;
+
             case GLFW.GLFW_KEY_DELETE: // DELETE key
                 if (serverListWidget.getSelectedOrNull() != null) {
                     if (Screen.hasShiftDown()) { // quick delete
@@ -68,10 +81,19 @@ public abstract class MultiplayerScreenMixin extends Screen {
                     }
                 }
                 break;
+
             case GLFW.GLFW_KEY_R: // R key (Rename)
                 if (serverListWidget.getSelectedOrNull() != null) {
                     this.buttonEdit.onPress();
                 }
+                break;
+
+            case GLFW.GLFW_KEY_A: // A key (ADD)
+                // TODO: Replace with Mixins using buttonAdd
+                this.selectedEntry = new ServerInfo(I18n.translate("selectServer.defaultName", new Object[0]), "", false);
+                this.client.setScreen(new AddServerScreen(this, this::addEntry, this.selectedEntry));
+                break;
+
             default:
                 break;
         }

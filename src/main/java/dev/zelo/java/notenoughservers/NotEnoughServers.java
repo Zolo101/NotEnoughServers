@@ -81,12 +81,12 @@ public class NotEnoughServers implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        // TODO: Do translation support
+        // TODO: Do keybind and translation string support
 //        KeyBinding MS_TOP = KeyBindingHelper.registerKeyBinding(new KeyBinding("Top of List", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_HOME, "Not Enough Servers"));
 //        KeyBinding MS_BOTTOM = KeyBindingHelper.registerKeyBinding(new KeyBinding("Bottom of List", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_END, "Not Enough Servers"));
 //        KeyBinding MS_DELETE = KeyBindingHelper.registerKeyBinding(new KeyBinding("Delete Server", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_DELETE, "Not Enough Servers"));
+//        KeyBinding MS_ADD = KeyBindingHelper.registerKeyBinding(new KeyBinding("Add Server", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_A, "Not Enough Servers"));
 //        KeyBinding MS_RENAME = KeyBindingHelper.registerKeyBinding(new KeyBinding("Rename Server", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_F2, "Not Enough Servers"));
-
 
         SuggestionProvider<FabricClientCommandSource> addActions = (context, builder) -> {
             MinecraftClient client = MinecraftClient.getInstance();
