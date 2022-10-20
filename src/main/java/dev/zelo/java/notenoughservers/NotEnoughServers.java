@@ -118,50 +118,5 @@ public class NotEnoughServers implements ClientModInitializer {
                 .then(argument("name", StringArgumentType.greedyString())
                         .suggests(joinActions)
                         .executes(this::attemptJoin))));
-
-//        ClientCommandManager.DISPATCHER.register(
-//            ClientCommandManager.literal("joinserver")
-//                    .then(ClientCommandManager.argument("name", StringArgumentType.string())
-////                            .suggests(JoinserverSuggestor)
-//                            .executes(context -> {
-//
-//                Text todoText = new LiteralText("Todo!")
-//                        .styled((style -> style.withColor(Formatting.RED)));
-//                context.getSource().sendFeedback(todoText);
-//
-//                MinecraftClient client = MinecraftClient.getInstance();
-//                String serverName = StringArgumentType.getString(context, "name");
-//                ServerList serverList = new ServerList(client);
-//                serverList.loadFile();
-//                List<ServerInfo> servers = ((ServerListAccessor) serverList).getServers();
-//                Optional<ServerInfo> serverToJoin = servers.stream()
-//                        .filter(serverInfo -> serverInfo.name.equals(serverName))
-//                        .findFirst();
-//
-//                if (serverToJoin.isPresent()) {
-//                    Text errorText = new LiteralText("Unknown server name!")
-//                            .styled((style -> style.withColor(Formatting.RED)));
-//
-//                    client.disconnect();
-//                    ConnectScreen.connect(client.currentScreen, client, ServerAddress.parse(serverToJoin.get().address), serverToJoin.get());
-//                } else {
-//                    Text errorText = new LiteralText("Unknown server name!")
-//                            .styled((style -> style.withColor(Formatting.RED)));
-//
-////                    context.getSource().sendFeedback(errorText, false);
-//                }
-//                return 1;
-//            })));
-//        ClientCommandManager.DISPATCHER.register(
-//            ClientCommandManager.literal("relog")
-//                    .executes(context -> {
-//
-//                MinecraftClient client = MinecraftClient.getInstance();
-//                ServerInfo server = client.getCurrentServerEntry();
-//
-//                client.disconnect();
-//                ConnectScreen.connect(client.currentScreen, client, ServerAddress.parse(server.address), server);
-//                return 1;
-//            }));
     }
 }
