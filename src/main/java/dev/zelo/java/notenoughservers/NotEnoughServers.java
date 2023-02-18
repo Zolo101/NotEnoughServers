@@ -75,7 +75,7 @@ public class NotEnoughServers implements ClientModInitializer {
         serverList.loadFile();
         List<ServerInfo> servers = ((ServerListAccessor) serverList).getServers();
         Optional<ServerInfo> serverToJoin = servers.stream()
-                .filter(serverInfo -> serverInfo.name.equals(serverName))
+                .filter(serverInfo -> serverInfo.name.equals(serverName) || serverInfo.address.equals(serverName))
                 .findFirst();
 
         if (serverToJoin.isPresent()) {
@@ -89,7 +89,7 @@ public class NotEnoughServers implements ClientModInitializer {
             client.send(() -> ConnectScreen.connect(client.currentScreen, client, ServerAddress.parse(serverToJoin.get().address), serverToJoin.get()));
         } else {
             // TODO: Do translation key support
-            Text errorText = Text.literal("Unknown server name!")
+            Text errorText = Text.literal("Server name/address is not in the serverlist!")
                     .styled((style -> style.withColor(Formatting.RED)));
             context.getSource().sendFeedback(errorText);
         }
@@ -113,7 +113,9 @@ public class NotEnoughServers implements ClientModInitializer {
             List<ServerInfo> servers = ((ServerListAccessor) serverList).getServers();
 
             for (ServerInfo server : servers) {
-                builder.suggest(server.name);
+                // default to IP for nameless servers
+                String name = (server.name.isEmpty()) ? server.address : server.name;
+                builder.suggest(name);
             }
 
             return CompletableFuture.completedFuture(builder.build());
